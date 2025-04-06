@@ -1,4 +1,4 @@
-import { Button, TextInput } from 'flowbite-react';
+import { Alert, Button, TextInput } from 'flowbite-react';
 import { useEffect, useRef, useState } from 'react';
 import {useSelector} from 'react-redux';
 import { updateStart, upadateSuccess, updateFailure } from '../redux/user/userSlice';
@@ -12,6 +12,8 @@ export default function DashProfile() {
   //const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   //const [imageFileUploadError, setImageFileUploadError] = useState(null);
   //console.log(imageFileUploadProgress, imageFileUploadError);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [updateUserError, setUpdateUserError] = useState(null);
   const [formData, setFormData] = useState({});
   const filePickerRef = useRef();
   const dispatch = useDispatch();
@@ -58,9 +60,18 @@ export default function DashProfile() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+console.log(formData);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUpdateUserError(null);
+    setUpdateUserSuccess(null);
     if (Object.keys(formData).length === 0){
+      setUpdateUserError('No changes made');
+      return;
+    }
+    if(imageFileUploading){
+      setUpdateUserError('Please wait for image to upload');
       return;
     }
     try {
@@ -75,12 +86,14 @@ export default function DashProfile() {
       const data = await res.json();
       if (!res.ok){
         dispatch(updateFailure(data.message));
-
+        setUpdateUserError(data.message);
       }else{
         dispatch(upadateSuccess(data));
+        setUpdateUserSuccess("User's profile updated successfully");
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
+      setUpdateUserError(error.message);
     }
   };
   return (
@@ -124,6 +137,17 @@ export default function DashProfile() {
         <span className='cursor-pointer'>Delete Account</span>
         <span className='cursor-pointer'>Sign Out</span>
       </div>
+      {updateUserSuccess && (
+        <Alert color='success' className='mt-5'>
+          {updateUserSuccess}
+        </Alert>
+      )}
+      {updateUserError && (
+        <Alert color='failure' className='mt-5'>
+          {updateUserError}
+        </Alert>
+      )}
+
     </div>
   );
 }
