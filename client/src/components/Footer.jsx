@@ -12,9 +12,9 @@ export default function FooterCom() {
             font-semibold dark:text-white">
             <span className="px-2 py-1 bg-gradient-to-r from-indigo-500
             via-purple-500 to-pink-500 rounded-lg text-white">
-                Sudesh's
+                News
             </span>
-            Blog
+            Sphere
         </Link>
             </div>
             <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">
@@ -33,7 +33,7 @@ export default function FooterCom() {
                     target='_blank'
                     rel='noopener noreferrer'
                     >
-                        Sudesh's Blog
+                        NewsSphere
                     </Footer.Link>
                </Footer.LinkGroup>
                </div>
